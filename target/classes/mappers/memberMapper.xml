@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+
+	<insert id="regist" parameterType="org.com.vo.MemberVO">
+		INSERT INTO gohodb.MEMBER(
+			MB_ID
+			, MB_PW
+			, MB_NAME
+			, MB_BIRTH
+			, MB_GENDER
+			, MB_EMAIL
+			, MB_GRADE
+			, MB_SUB_YN
+			, MB_SUB_DATE
+		) VALUES (
+			#{memberId}
+			,HEX(AES_ENCRYPT(#{memberPW}, 'goho'))
+			,#{memberName}
+			,#{memberBirth}
+			,#{memberGender}
+			,#{memberEmail}
+			,#{memberGrade}
+			,'Y'
+			,now()
+		) 
+	</insert>
+	
+	<select id="login" parameterType="org.com.vo.MemberVO" resultType="org.com.vo.MemberVO">
+		SELECT MB_ID
+			, MB_PW
+			, MB_NAME
+			, MB_BIRTH
+			, MB_GENDER
+			, MB_EMAIL
+			, MB_GRADE
+			, MB_SUB_YN
+			, MB_SUB_DATE
+		FROM gohodb.MEMBER 
+		WHERE MB_ID = #{memberId} 
+		AND MB_PW = HEX(AES_ENCRYPT(#{memberPW}, 'goho'))
+		AND MB_SUB_YN = 'Y'
+	</select>
+
+</mapper>
